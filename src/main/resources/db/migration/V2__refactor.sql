@@ -48,7 +48,7 @@ CREATE TABLE RecurrentTransaction (
     recurrent_id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWSEQUENTIALID(),
     value MONEY NOT NULL CHECK (value >= 0),
     initial_date DATE NOT NULL,
-    end_date DATE CHECK (end_date IS NULL OR end_date >= initial_date),
+    end_date DATE,
     frequency TINYINT NOT NULL,
     custom_frequency SMALLINT,
     created_at DATETIME NOT NULL,
@@ -56,7 +56,8 @@ CREATE TABLE RecurrentTransaction (
     account_id UNIQUEIDENTIFIER,
     category_id UNIQUEIDENTIFIER,
     FOREIGN KEY (account_id) REFERENCES Account(account_id),
-    FOREIGN KEY (category_id) REFERENCES Category(category_id)
+    FOREIGN KEY (category_id) REFERENCES Category(category_id),
+    CONSTRAINT chk_dates CHECK (end_date IS NULL OR end_date >= initial_date)
 );
 
 CREATE TABLE LiquidityProjection (
